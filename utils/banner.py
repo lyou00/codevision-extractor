@@ -32,7 +32,7 @@ def print_banner(animated: bool = True):
         f"{NEON_CYAN}┃{RESET}   {NEON_MAGENTA}{BOLD}╚██████╗╚██████╔╝██████╔╝███████╗ ╚████╔╝ ██║███████║██║  ██║██║███████╗██║ ╚████║{RESET}   {NEON_CYAN}┃{RESET}",
         f"{NEON_CYAN}┃{RESET}   {NEON_MAGENTA}{BOLD} ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝  ╚═══╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝{RESET}   {NEON_CYAN}┃{RESET}",
         f"{NEON_CYAN}┃{RESET}                                                                                            {NEON_CYAN}┃{RESET}",
-        f"{NEON_CYAN}┃{RESET}   {NEON_GREEN}{BOLD}⚡ EXTRACTOR v2.0{RESET}  │  {NEON_YELLOW}Video-to-Code Reconstruction Engine{RESET}                          {NEON_CYAN}┃{RESET}",
+        f"{NEON_CYAN}┃{RESET}   {NEON_GREEN}{BOLD}⚡ EXTRACTOR v2.0{RESET}  │  {NEON_YELLOW}Universal Multi-Language Video-to-Code Engine{RESET}                   {NEON_CYAN}┃{RESET}",
         f"{NEON_CYAN}┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫{RESET}",
         f"{NEON_CYAN}┃{RESET}   {DIM_GRAY}[ ENGINE ]{RESET}  FFmpeg + Tesseract OCR + Python  │  {NEON_GREEN}100% Local & Offline Processing{RESET}       {NEON_CYAN}┃{RESET}",
         f"{NEON_CYAN}┃{RESET}   {DIM_GRAY}[ AUTHOR ]{RESET}  {BRIGHT_WHITE}{BOLD}Eng. Ibrahim Anas Al-Azzani{RESET}        │  {NEON_CYAN}CyberPro Engineering Works{RESET}           {NEON_CYAN}┃{RESET}",

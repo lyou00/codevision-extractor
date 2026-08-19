@@ -2,9 +2,9 @@
 
 [English](#-codevision-extractor) | **العربية**
 
-# 🎮 CodeVision Extractor — مستخلص الأكواد من الفيديو
+# 🎮 CodeVision Extractor — محرك استخراج الأكواد البرمجية من الفيديو
 
-أداة مفتوحة المصدر لاستخراج الأكواد البرمجية (C#/Unity) تلقائياً من فيديوهات الدورات التعليمية — بدون إنترنت، بدون سحابة، محلياً بالكامل.
+أداة شاملة ومفتوحة المصدر لاستخراج واستعادة الأكواد البرمجية تلقائياً بمختلف لغات البرمجة (C#, Python, C++, Java, JavaScript, Flutter/Dart, Unity) من فيديوهات الدورات التعليمية — بدون إنترنت، بدون سحابة، محلياً بالكامل 100%.
 
 > **سايبر برو للأعمال التقنية والهندسية**
 > المهندس إبراهيم أنس العزاني
@@ -15,7 +15,7 @@
 
 # 🎮 CodeVision Extractor
 
-**Video-to-Code Reconstruction Engine** — Automatically extract C# source code from Unity/programming tutorial videos using OCR. 100% local, no cloud, no API keys.
+**Universal Video-to-Code Reconstruction Engine** — Automatically extract source code in any programming language (C#, Python, C++, Java, JavaScript, Flutter/Dart, Unity) from tutorial videos using OCR. 100% local, no cloud, no API keys.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python 3.8+](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
