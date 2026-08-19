@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+.env/
+
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+*.swo
+Thumbs.db
+.DS_Store
+
+# Output directories (Extracted video code, frames, OCR logs, test outputs)
+_CodeVision_Output/
+_CodeVision_Test/
+_CodeVision_*/
+_Extracted_CSharp*/
+Test_Video_*/
+CandidateFrames/
+Frames/
+OCR/
+ScriptHistory/
+
+# Accidental copy files
+README - Copy.md
+* - Copy.*
+
+# Tesseract local binary (users download separately)
+tesseract/

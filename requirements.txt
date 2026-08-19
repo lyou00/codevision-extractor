@@ -1,0 +1,3 @@
+# CodeVision Extractor - Dependencies
+# No external Python packages required!
+# Uses only Python standard library: os, sys, re, glob, difflib, argparse, abc, dataclasses, shutil, subprocess
