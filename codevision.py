@@ -119,14 +119,15 @@ def process_video(video: VideoFile, output_base: Path, interval: int,
     # ── Step 3: Code Reconstruction ──────────────────────────────
     if report.candidate_frames > 0:
         log.step("Reconstructing C# scripts...")
-        script = builder.reconstruct(ocr_results)
+        scripts = builder.reconstruct_many(ocr_results, video.name)
 
-        if script.final_lines:
-            script.source_video = video.name
-            builder.export(script, video_dir, video.name)
-            report.scripts_found.append(f"{script.class_name}.cs")
-            log.step(f"Script reconstructed: {script.class_name}.cs "
-                     f"({len(script.history)} snapshots)")
+        if scripts:
+            for script in scripts:
+                script.source_video = video.name
+                builder.export(script, video_dir, video.name)
+                report.scripts_found.append(f"{script.class_name}.cs")
+                log.step(f"Script reconstructed: {script.class_name}.cs "
+                         f"({len(script.history)} snapshots)")
         else:
             log.warn("No code lines survived the cleaning pipeline.")
     else:
@@ -292,12 +293,16 @@ def main():
     # ── Summary ──────────────────────────────────────────────────
     total_scripts = sum(len(r.scripts_found) for r in all_reports)
     total_candidates = sum(r.candidate_frames for r in all_reports)
+    project_scripts = builder.get_project_scripts()
+    builder.export_project(output_base)
 
     log.success("ALL VIDEOS PROCESSED SUCCESSFULLY")
     log.info(f"Videos processed: {len(all_reports)}")
     log.info(f"Total code frames detected: {total_candidates}")
-    log.info(f"Total scripts reconstructed: {total_scripts}")
+    log.info(f"Total scripts reconstructed in videos: {total_scripts}")
+    log.info(f"Final project classes: {len(project_scripts)}")
     log.info(f"Output directory: {output_base}")
+    log.info(f"Final project scripts: {output_base / 'ProjectScripts'}")
 
     # ── Master Report CSV ────────────────────────────────────────
     csv_path = output_base / "MASTER_REPORT.csv"

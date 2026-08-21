@@ -30,7 +30,21 @@ class LineMerger:
         if not new_lines:
             return list(master)
 
+        master_meaningful = {
+            line.strip() for line in master
+            if self._is_meaningful_line(line)
+        }
+        new_meaningful = {
+            line.strip() for line in new_lines
+            if self._is_meaningful_line(line)
+        }
+        if new_meaningful and not (master_meaningful & new_meaningful):
+            return self._append_unseen(master, new_lines)
+
         sm = difflib.SequenceMatcher(None, master, new_lines)
+        if sm.ratio() < 0.25:
+            return self._append_unseen(master, new_lines)
+
         merged = []
 
         for tag, i1, i2, j1, j2 in sm.get_opcodes():
@@ -56,27 +70,44 @@ class LineMerger:
 
         return merged
 
+    def _append_unseen(self, master: List[str],
+                       new_lines: List[str]) -> List[str]:
+        merged = list(master)
+        existing = {line.strip() for line in master if line.strip()}
+        for line in new_lines:
+            stripped = line.strip()
+            if stripped in ('{', '}', '') or stripped not in existing:
+                merged.append(line)
+                if stripped:
+                    existing.add(stripped)
+        return merged
+
+    def _is_meaningful_line(self, line: str) -> bool:
+        stripped = line.strip()
+        return len(stripped) > 2 and stripped not in ('{', '}')
+
     def deduplicate_final(self, lines: List[str]) -> List[str]:
         """
-        Remove exact duplicate lines from the final output,
-        while preserving structural duplicates like braces.
+        Remove only accidental adjacent duplicates and repeated using lines.
 
-        Args:
-            lines: All merged code lines.
-
-        Returns:
-            Deduplicated line list.
+        Code can legitimately repeat statements like SetActive(false), so a
+        global "seen line" pass can delete real code from later methods.
         """
         final = []
-        seen = set()
+        seen_usings = set()
+        previous = None
 
         for line in lines:
             stripped = line.strip()
-            # Always allow structural characters
-            if stripped in ('{', '}', ''):
-                final.append(line)
-            elif stripped not in seen:
-                final.append(line)
-                seen.add(stripped)
+            if stripped.startswith("using "):
+                if stripped in seen_usings:
+                    continue
+                seen_usings.add(stripped)
+
+            if stripped and stripped == previous:
+                continue
+
+            final.append(line)
+            previous = stripped
 
         return final
