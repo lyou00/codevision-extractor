@@ -10,6 +10,7 @@ per-video result.
 from pathlib import Path
 from typing import Dict, List, Set
 from datetime import datetime
+import difflib
 
 from core.models import OcrResult, CodeSnapshot, ReconstructedScript
 from core.interfaces import ICodeReconstructor
@@ -71,6 +72,9 @@ class ScriptBuilder(ICodeReconstructor):
                 class_name = fallback_class
             if not class_name or class_name == "ExtractedScript":
                 class_name = self._current_class or "ExtractedScript"
+            class_name = self._resolve_class_alias(class_name)
+            if not self._detector.is_valid_class_name(class_name):
+                class_name = self._current_class or "ExtractedScript"
 
             self._current_class = class_name
             touched.add(class_name)
@@ -116,7 +120,7 @@ class ScriptBuilder(ICodeReconstructor):
         self._write_script(script, scripts_dir, video_name)
         self._write_history(script, history_dir)
 
-    def export_project(self, output_dir: Path) -> None:
+    def export_project(self, output_dir: Path, include_history: bool = True) -> None:
         """
         Write the final accumulated codebase across all processed videos.
         """
@@ -128,7 +132,8 @@ class ScriptBuilder(ICodeReconstructor):
 
         for script in scripts:
             self._write_script(script, project_scripts_dir, "ALL_VIDEOS")
-            self._write_history(script, project_history_dir)
+            if include_history:
+                self._write_history(script, project_history_dir)
 
         index_path = output_dir / "PROJECT_INDEX.md"
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -153,6 +158,32 @@ class ScriptBuilder(ICodeReconstructor):
             final_lines=final_lines,
             history=list(self._project_history.get(class_name, [])),
         )
+
+    def _resolve_class_alias(self, class_name: str) -> str:
+        normalized = self._detector.normalize_class_name(class_name)
+        if not normalized:
+            return class_name
+
+        if normalized in self._project_lines:
+            return normalized
+
+        best_name = ""
+        best_score = 0.0
+        normalized_lower = normalized.lower()
+        for existing in self._project_lines:
+            score = difflib.SequenceMatcher(
+                None,
+                normalized_lower,
+                existing.lower(),
+            ).ratio()
+            if score > best_score:
+                best_score = score
+                best_name = existing
+
+        if best_name and best_score >= 0.86:
+            return best_name
+
+        return normalized
 
     def _format_source_frame(self, result: OcrResult, video_name: str) -> str:
         frame_name = result.frame.image_path.stem
